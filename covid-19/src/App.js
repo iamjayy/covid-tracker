@@ -3,6 +3,7 @@ import Card from "react-bootstrap/Card";
 import CardDeck from "react-bootstrap/CardDeck";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
+import Columns from "react-columns";
 
 function App() {
   const [latest, setLatest] = useState([]);
@@ -27,21 +28,40 @@ function App() {
   const lastUpdated = date.toString();
 
   //create a function to loop through the cards instead of hard coding 100+ cards
-  const countries = results.map(data => {
+  const countries = results.map((data, i) => {
     return (
       <Card
+        key={i}
         bg="light"
         text={"dark"}
         className="text-center"
         style={{ margin: "10px" }}
       >
+        <Card.Img variant="top" src={data.countryInfo.flag} />
         <Card.Body>
           <Card.Title>{data.country}</Card.Title>
-          <Card.Text>Cases {latest.cases}</Card.Text>
+          <Card.Text>Cases: {latest.cases}</Card.Text>
+          <Card.Text>Deaths: {latest.deaths}</Card.Text>
+          <Card.Text>Recovered: {latest.recovered}</Card.Text>
+          <Card.Text>Today's Cases: {latest.todayCases}</Card.Text>
+          <Card.Text>Today's Death: {latest.todayDeaths}</Card.Text>
+          <Card.Text>Active: {latest.active}</Card.Text>
+          <Card.Text>Critical: {latest.critical}</Card.Text>
         </Card.Body>
       </Card>
     );
   });
+
+  var queries = [
+    {
+      columns: 2,
+      query: "min-width: 500px"
+    },
+    {
+      columns: 3,
+      query: "min-width: 1000px"
+    }
+  ];
 
   return (
     <div>
@@ -84,7 +104,7 @@ function App() {
           </Card.Footer>
         </Card>
       </CardDeck>
-      {countries}
+      <Columns queries={queries}>{countries}</Columns>
     </div>
   );
 }
